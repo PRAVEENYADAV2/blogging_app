@@ -1,12 +1,17 @@
+import { headers } from "next/headers";
+
 import { notFound } from "next/navigation";
+export async function getBaseUrl() {
+  const host = headers().get("host");
+  const protocol = process.env.NODE_ENV === "production" ? "https" : "http";
+  return `${protocol}://${host}`;
+}
 
 async function getPost(id) {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/${id}`,
-    {
-      cache: "no-store",
-    }
-  );
+  const baseUrl = await getBaseUrl();
+  const res = await fetch(`${baseUrl}/api/posts/${id}`, {
+    cache: "no-store",
+  });
   if (!res.ok) return null;
   return res.json();
 }

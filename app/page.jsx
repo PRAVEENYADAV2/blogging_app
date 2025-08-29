@@ -1,8 +1,16 @@
 import { cookies } from "next/headers";
+import { headers } from "next/headers";
 import jwt from "jsonwebtoken";
 
+export async function getBaseUrl() {
+  const host = headers().get("host");
+  const protocol = process.env.NODE_ENV === "production" ? "https" : "http";
+  return `${protocol}://${host}`;
+}
+
 async function getPosts() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/posts`, {
+    const baseUrl = await getBaseUrl();
+  const res = await fetch(`${baseUrl}/api/posts`, {
     cache: "no-store",
   });
   if (!res.ok) throw new Error("Failed to fetch posts");
