@@ -14,6 +14,10 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "Blog",
   description: "Genral Blog Site",
+  icons: {
+    icon: "/favicon.png", // Path to your favicon
+    // apple: "/apple-icon.png", // Path to your Apple touch icon
+  },
 };
 
 export default function RootLayout({ children }) {
