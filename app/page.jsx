@@ -59,21 +59,16 @@ export default async function Home() {
       {/* Latest Posts */}
       <main>
         <h3>Latest Posts</h3>
-        <div className="grid grid-cols-3 gap-[10px]">
+        <div className="grid grid-cols-4  gap-[10px]">
           {posts && posts.length > 0 ? (
             posts.map((post) => (
-              <article key={post._id}>
-                <img
-                  src="https://www.chitkara.edu.in/blogs/wp-content/uploads/2023/09/Blogging-in-Digital-Marketing.jpg"
-                  alt={post.title}
-                  width={400}
-                  height={200}
-                />
-                <h4>{post.title}</h4>
-                {/* Show only first 100 chars */}
-                <p>{post.content.slice(0, 100)}...</p>
-                <a href={`/posts/${post._id}`}>Read More</a>
-              </article>
+              <a href={`/posts/${post._id}`} className="text-balck">
+                <article key={post._id} className="border">
+                  <h4>{post.title}</h4>
+                  {/* Show only first 100 chars */}
+                  <a href={`/posts/${post._id}`}>Read More</a>
+                </article>
+              </a>
             ))
           ) : (
             <p>No posts found</p>
