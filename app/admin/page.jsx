@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import { redirect } from "next/navigation";
 import CreatePostForm from "@/components/CreatePostForm";
+import Logout from "@/components/Logout"
 export default async function AdminPage() {
   // 🔹 Get cookies
   const cookieStore = await cookies();

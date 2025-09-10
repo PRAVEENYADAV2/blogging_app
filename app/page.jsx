@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { headers } from "next/headers";
 import jwt from "jsonwebtoken";
+import Logout from "@/components/Logout";
 
 export async function getBaseUrl() {
   const host = headers().get("host");
@@ -9,7 +10,7 @@ export async function getBaseUrl() {
 }
 
 async function getPosts() {
-    const baseUrl = await getBaseUrl();
+  const baseUrl = await getBaseUrl();
   const res = await fetch(`${baseUrl}/api/posts`, {
     cache: "no-store",
   });
@@ -38,12 +39,7 @@ export default async function Home() {
       <header>
         <div>
           <h1>Blogify</h1>
-          <nav>
-            <a href="#">Home</a>
-            <a href="#">About</a>
-            <a href="#">Blog</a>
-            <a href="#">Contact</a>
-          </nav>
+          <nav>{user ? <Logout></Logout> : <a href="/login">Login</a>}</nav>
         </div>
       </header>
 
