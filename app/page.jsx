@@ -3,11 +3,9 @@ import jwt from "jsonwebtoken";
 import Logout from "@/components/Logout";
 
 export async function getBaseUrl() {
-  if (process.env.VERCEL_URL) {
-    return `https://${process.env.VERCEL_URL}`;
-  }
-
-  return "http://localhost:3000";
+  const protocol = process.env.NODE_ENV === "production" ? "https" : "http";
+  const host = process.env.VERCEL_URL || "localhost:3000";
+  return `${protocol}://${host}`;
 }
 
 async function getPosts() {
