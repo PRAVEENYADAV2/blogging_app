@@ -2,11 +2,15 @@ import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import Logout from "@/components/Logout";
 
+import { headers } from "next/headers";
+
 export async function getBaseUrl() {
+  const h = await headers(); // MUST await
+  const host = h.get("host");
   const protocol = process.env.NODE_ENV === "production" ? "https" : "http";
-  const host = process.env.VERCEL_URL || "localhost:3000";
   return `${protocol}://${host}`;
 }
+
 
 async function getPosts() {
   const baseUrl = await getBaseUrl();
