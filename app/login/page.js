@@ -35,36 +35,105 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "95dvh",
+        background: "#f5f5f5",
+        fontFamily: "monospace",
+      }}
+    >
       <form
         onSubmit={handleLogin}
-        className="bg-white p-6 rounded-lg shadow-md w-80"
+        style={{
+          width: "320px",
+          background: "#fff",
+          padding: "24px",
+          borderRadius: "8px",
+          boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
+        }}
       >
-        <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
+        <h2
+          style={{
+            fontSize: "22px",
+            fontWeight: "700",
+            textAlign: "center",
+            marginBottom: "18px",
+          }}
+        >
+          Login
+        </h2>
+
         <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="w-full p-2 border rounded mb-3"
+          style={{
+            width: "calc(100% - 21px)",
+            padding: "10px",
+            borderRadius: "6px",
+            border: "1px solid #ccc",
+            marginBottom: "12px",
+            fontFamily: "monospace",
+            fontSize: "14px",
+          }}
         />
+
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          className="w-full p-2 border rounded mb-3"
+          style={{
+            width: "calc(100% - 21px)",
+            padding: "10px",
+            borderRadius: "6px",
+            border: "1px solid #ccc",
+            marginBottom: "18px",
+            fontFamily: "monospace",
+            fontSize: "14px",
+          }}
         />
+
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+          style={{
+            width: "100%",
+            padding: "10px",
+            background: "#000",
+            color: "#fff",
+            border: "none",
+            borderRadius: "6px",
+            cursor: "pointer",
+            fontFamily: "monospace",
+            fontSize: "15px",
+            transition: "0.2s",
+          }}
+          onMouseOver={(e) => (e.currentTarget.style.opacity = "0.85")}
+          onMouseOut={(e) => (e.currentTarget.style.opacity = "1")}
         >
           Login
         </button>
-        {message && <p className="mt-3 text-center text-sm">{message}</p>}
+
+        {message && (
+          <p
+            style={{
+              textAlign: "center",
+              marginTop: "10px",
+              fontSize: "13px",
+              color: "#333",
+            }}
+          >
+            {message}
+          </p>
+        )}
       </form>
     </div>
   );
+
 }

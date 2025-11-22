@@ -1,11 +1,10 @@
 import { cookies } from "next/headers";
-import { headers } from "next/headers";
 import jwt from "jsonwebtoken";
 import Logout from "@/components/Logout";
 
 export async function getBaseUrl() {
-  const host = headers().get("host");
   const protocol = process.env.NODE_ENV === "production" ? "https" : "http";
+  const host = process.env.VERCEL_URL || "localhost:3000";
   return `${protocol}://${host}`;
 }
 
@@ -34,40 +33,95 @@ export default async function Home() {
   const { posts } = await getPosts();
 
   return (
-    <div className="max-w-[1300px] m-auto">
-      {/* Header */}
-      <header>
-        <div>
-          <h1>Blogify</h1>
-          <nav>{user ? <Logout></Logout> : <a href="/login">Login</a>}</nav>
-        </div>
+    <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "20px", fontFamily:"monospace" }}>
+      {/* Navbar */}
+      <header
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "15px 0",
+          borderBottom: "1px solid #ddd",
+        }}
+      >
+        <a
+          href="/"
+          style={{
+            fontSize: "24px",
+            fontWeight: "bold",
+            textDecoration: "none",
+            color: "#000",
+          }}
+        >
+          Blogify
+        </a>
+
+        <nav>
+          {user ? (
+            <Logout />
+          ) : (
+            <a
+              href="/login"
+              style={{
+                display: "inline-block",
+                padding: "8px 16px",
+                background: "#000",
+                color: "#fff",
+                borderRadius: "6px",
+                textDecoration: "none",
+              }}
+            >
+              Login
+            </a>
+          )}
+        </nav>
       </header>
 
       {/* Hero Section */}
-      <section>
-        <h2>Welcome to Blogify</h2>
-        <p>Your go-to place for insightful articles and stories.</p>
+      <section style={{ textAlign: "center", margin: "60px 0" }}>
+        <h2 style={{ fontSize: "36px", marginBottom: "10px" }}>
+          Welcome to Blogify
+        </h2>
+        <p style={{ color: "#666", marginBottom: "20px" }}>
+          Your go-to place for insightful articles and stories.
+        </p>
+
         {user ? (
-          <p className="text-green-600 font-semibold">
-            Logged in as {user.email}, Role: {user.role}
+          <p style={{ color: "green", fontWeight: "500" }}>
+            Logged in as {user.email} • Role: {user.role}
           </p>
         ) : (
-          <p className="text-red-500 font-semibold">Not logged in</p>
+          <p style={{ color: "red", fontWeight: "500" }}>Not logged in</p>
         )}
       </section>
 
       {/* Latest Posts */}
-      <main>
-        <h3>Latest Posts</h3>
-        <div className="grid grid-cols-4  gap-[10px]">
-          {posts && posts.length > 0 ? (
+      <main style={{ margin: "50px 0" }}>
+        <h3 style={{ fontSize: "20px", marginBottom: "15px" }}>Latest Posts</h3>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
+            gap: "20px",
+          }}
+        >
+          {posts?.length ? (
             posts.map((post) => (
-              <a href={`/posts/${post._id}`} className="text-balck">
-                <article key={post._id} className="border">
-                  <h4>{post.title}</h4>
-                  {/* Show only first 100 chars */}
-                  <a href={`/posts/${post._id}`}>Read More</a>
-                </article>
+              <a
+                key={post._id}
+                href={`/posts/${post._id}`}
+                style={{
+                  border: "1px solid #ddd",
+                  borderRadius: "5px",
+                  padding: "15px",
+                  textDecoration: "none",
+                  color: "#000",
+                  backgroundColor: "#EEF5DB",
+                  transition: "background 0.2s",
+                }}
+              >
+                <h4 style={{ fontWeight: "300", fontSize: "20px" }}>{post.title}</h4>
               </a>
             ))
           ) : (
@@ -76,8 +130,17 @@ export default async function Home() {
         </div>
       </main>
 
-      <footer>
-        <p>© 2025 Blogify. All rights reserved.</p>
+      {/* Footer */}
+      <footer
+        style={{
+          textAlign: "center",
+          marginTop: "60px",
+          paddingTop: "20px",
+          borderTop: "1px solid #ddd",
+          color: "#888",
+        }}
+      >
+        © 2025 Blogify. All rights reserved.
       </footer>
     </div>
   );

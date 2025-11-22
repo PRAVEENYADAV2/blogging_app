@@ -15,12 +15,12 @@ export default function CreatePostForm() {
     const fetchUser = async () => {
       const res = await fetch("/api/auth/me");
       const data = await res.json();
-      console.log(data.user);
+      // console.log(data.user);
 
       setUser(data.user);
     };
     fetchUser();
-    console.log(user);
+    // console.log(user);
   }, []);
 
   const handleSubmit = async (e) => {
@@ -36,7 +36,6 @@ export default function CreatePostForm() {
           title,
           content,
           tags: tags.split(",").map((tag) => tag.trim()),
-          author: user?.id, // get user from decoded token
         }),
       });
 

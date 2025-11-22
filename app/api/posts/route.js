@@ -1,13 +1,26 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/dbConnect";
 import Post from "@/model/Post";
-import User from "@/model/Users"; 
+import User from "@/model/Users";
+import jwt from "jsonwebtoken";
 
 export async function POST(req) {
   try {
     await dbConnect();
 
-    const { title, content, author, tags } = await req.json();
+    const token = req.cookies.get("token")?.value;
+    if (!token) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    let decodedUser;
+    try {
+      decodedUser = jwt.verify(token, process.env.JWT_SECRET);
+    } catch {
+      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+    }
+
+    const { title, content, tags } = await req.json();
 
     if (!title || !content) {
       return NextResponse.json(
@@ -16,11 +29,16 @@ export async function POST(req) {
       );
     }
 
+    const user = await User.findById(decodedUser.id);
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
     const post = await Post.create({
       title,
       content,
-      author,
       tags,
+      author: user._id,
     });
 
     return NextResponse.json(
@@ -32,14 +50,12 @@ export async function POST(req) {
   }
 }
 
-
 export async function GET() {
   try {
-    await dbConnect(); // ✅ Connect to MongoDB
+    await dbConnect();
 
-    // Fetch all posts, sorted by newest first, and populate author details
     const posts = await Post.find({})
-      .populate("author", "username _id email") 
+      .populate("author", "username email")
       .sort({ createdAt: -1 });
 
     return NextResponse.json({ success: true, posts }, { status: 200 });
