@@ -1,3 +1,32 @@
 @tailwind base;
 @tailwind utilities;
 @tailwind utilities;
+/* Code Block Global Style */
+pre {
+  background: #EEF5DB;
+  color: #000000;
+  padding: 16px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 20px 0;
+  font-size: 15px;
+  line-height: 1.6;
+  font-weight: 600;
+  /* border: 1px solid #222; */
+}
+
+/* Inline code */
+code {
+  background: #EEF5DB;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #000000;
+}
+
+/* Remove background duplication inside code-blocks */
+pre code {
+  background: none;
+  padding: 0;
+  color: inherit;
+}
