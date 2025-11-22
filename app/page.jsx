@@ -10,6 +10,29 @@ export async function getBaseUrl() {
   const protocol = process.env.NODE_ENV === "production" ? "https" : "http";
   return `${protocol}://${host}`;
 }
+function formatDate(date) {
+  const d = new Date(date);
+
+  const day = d.getDate();
+  const suffix =
+    day % 10 === 1 && day !== 11
+      ? "st"
+      : day % 10 === 2 && day !== 12
+      ? "nd"
+      : day % 10 === 3 && day !== 13
+      ? "rd"
+      : "th";
+
+  const month = d.toLocaleString("en-US", { month: "short" }); // Feb
+  const year = d.getFullYear();
+  const time = d.toLocaleString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+
+  return `${day}${suffix} ${month} ${year} ${time}`;
+}
 
 
 async function getPosts() {
@@ -37,7 +60,14 @@ export default async function Home() {
   const { posts } = await getPosts();
 
   return (
-    <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "20px", fontFamily:"monospace" }}>
+    <div
+      style={{
+        maxWidth: "1200px",
+        margin: "0 auto",
+        padding: "20px",
+        fontFamily: "monospace",
+      }}
+    >
       {/* Navbar */}
       <header
         style={{
@@ -62,7 +92,22 @@ export default async function Home() {
 
         <nav>
           {user ? (
-            <Logout />
+            <div style={{ display: "flex", gap: "10px" }}>
+              <Logout />
+              <a
+                href="/admin"
+                style={{
+                  display: "inline-block",
+                  padding: "9.5px 16px",
+                  background: "#000",
+                  color: "#fff",
+                  borderRadius: "6px",
+                  textDecoration: "none",
+                }}
+              >
+                Admin
+              </a>{" "}
+            </div>
           ) : (
             <a
               href="/login"
@@ -125,7 +170,10 @@ export default async function Home() {
                   transition: "background 0.2s",
                 }}
               >
-                <h4 style={{ fontWeight: "300", fontSize: "20px" }}>{post.title}</h4>
+                <h4 style={{ fontWeight: "300", fontSize: "20px" }}>
+                  {post.title}
+                </h4>
+                {formatDate(post.createdAt)}
               </a>
             ))
           ) : (

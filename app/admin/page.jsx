@@ -1,11 +1,27 @@
-import { cookies } from "next/headers";
+import PostTable from "@/components/PostTable";
+import { cookies, headers } from "next/headers";
 import jwt from "jsonwebtoken";
 import Logout from "@/components/Logout";
 import CreatePostForm from "@/components/CreatePostForm";
+export async function getBaseUrl() {
+  const h = await headers(); // MUST await
+  const host = h.get("host");
+  const protocol = process.env.NODE_ENV === "production" ? "https" : "http";
+  return `${protocol}://${host}`;
+}
 
+async function getPosts() {
+  const baseUrl = await getBaseUrl();
+  const res = await fetch(`${baseUrl}/api/posts`, {
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error("Failed to fetch posts");
+  return res.json();
+}
 
 export default async function AdminPage() {
-  const t =await cookies();
+  const { posts } = await getPosts();
+  const t = await cookies();
   const token = t.get("token")?.value;
   let user = null;
 
@@ -87,7 +103,6 @@ export default async function AdminPage() {
           </a>
         )}
       </header>
-
       {/* Admin Content */}
       <h1
         style={{
@@ -98,45 +113,15 @@ export default async function AdminPage() {
       >
         Admin Dashboard
       </h1>
-
       <p style={{ marginBottom: "20px", color: "#444" }}>
         Welcome, <strong>{user.email}</strong> — You have full admin access.
       </p>
-
       <div style={{ marginBottom: "40px" }}>
         <CreatePostForm />
       </div>
-
       {/* Admin Sections */}
-      <div
-        style={{
-          display: "grid",
-          gap: "20px",
-          gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
-        }}
-      >
-        {[
-          { title: "Manage Users", desc: "View and control user accounts" },
-          { title: "Manage Posts", desc: "Edit or delete blog posts" },
-          { title: "Site Settings", desc: "Configure platform options" },
-        ].map((item, idx) => (
-          <div
-            key={idx}
-            style={{
-              padding: "20px",
-              border: "1px solid #ddd",
-              borderRadius: "8px",
-              background: "#fff",
-              boxShadow: "0 2px 10px rgba(0,0,0,0.05)",
-            }}
-          >
-            <h2 style={{ fontSize: "18px", marginBottom: "8px" }}>
-              {item.title}
-            </h2>
-            <p style={{ fontSize: "14px", color: "#666" }}>{item.desc}</p>
-          </div>
-        ))}
-      </div>
+      {/* Replace your posts.map block with this: */}
+      {posts?.length ? <PostTable posts={posts} /> : <p>No posts found</p>}
     </div>
   );
 }
