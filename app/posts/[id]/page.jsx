@@ -2,8 +2,9 @@ import { headers } from "next/headers";
 
 import { notFound } from "next/navigation";
 export async function getBaseUrl() {
+  const h = await headers(); // MUST await
+  const host = h.get("host");
   const protocol = process.env.NODE_ENV === "production" ? "https" : "http";
-  const host = process.env.VERCEL_URL || "localhost:3000";
   return `${protocol}://${host}`;
 }
 
