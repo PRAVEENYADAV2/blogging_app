@@ -3,6 +3,7 @@ import { cookies, headers } from "next/headers";
 import jwt from "jsonwebtoken";
 import Logout from "@/components/Logout";
 import CreatePostForm from "@/components/CreatePostForm";
+import Link from "next/link";
 export async function getBaseUrl() {
   const h = await headers(); // MUST await
   const host = h.get("host");
@@ -74,17 +75,18 @@ export default async function AdminPage() {
           marginBottom: "30px",
         }}
       >
-        <a
-          href="/"
-          style={{
-            fontSize: "24px",
-            fontWeight: "bold",
-            color: "#000",
-            textDecoration: "none",
-          }}
-        >
-          Blogify
-        </a>
+        <Link href="/" style={{textDecoration: "none"}}>
+          <span
+            style={{
+              fontSize: "24px",
+              fontWeight: "bold",
+              color: "#000",
+              textDecoration: "none",
+            }}
+          >
+            Blogify{" "}
+          </span>
+        </Link>
 
         {user ? (
           <Logout />
